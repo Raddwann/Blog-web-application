@@ -1,0 +1,80 @@
+name: Django CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_DB: testdb
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.10'
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18.x'
+    
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r backend/requirements.txt
+    
+    - name: Run Django Tests
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/testdb
+      run: |
+        cd backend
+        python manage.py test
+    
+    - name: Frontend Lint and Test
+      run: |
+        cd frontend
+        npm ci
+        npm run lint
+        npm run test
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Build Frontend
+      run: |
+        cd frontend
+        npm run build
+    
+    - name: Deploy to Staging
+      if: github.ref == 'refs/heads/develop'
+      run: |
+        # Add staging deployment script
+        echo "Deploying to staging environment"
+    
+    - name: Deploy to Production
+      if: github.ref == 'refs/heads/main'
+      run: |
+        # Add production deployment script
+        echo "Deploying to production environment"
