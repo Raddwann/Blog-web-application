@@ -46,7 +46,7 @@ jobs:
       env:
         DATABASE_URL: postgresql://postgres:postgres@localhost:5432/testdb
       run: |
-        python manage.py test
+        python Blog-web-application\gaming-hub-main\manage.py test
     
     - name: Frontend Lint and Test
       run: |
