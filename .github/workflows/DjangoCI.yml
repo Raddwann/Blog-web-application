@@ -71,7 +71,7 @@ jobs:
     
     - name: Build Frontend
       run: |
-        cd Blog-web-application/gaming-hub-main/frontend
+        cd gaming-hub-main/frontend
         npm run build
     
     - name: Deploy to Staging
