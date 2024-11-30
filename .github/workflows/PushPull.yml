@@ -1,0 +1,22 @@
+name: Push and Pull Message
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  print-message:
+    name: Print Message
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Print Push or Pull Request Message
+        run: |
+          if [ "${{ github.event_name }}" == "push" ]; then
+            echo "Successfully pushed to the repository!"
+          elif [ "${{ github.event_name }}" == "pull_request" ]; then
+            echo "Successfully created or updated a pull request!"
+          fi
