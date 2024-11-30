@@ -33,5 +33,8 @@ jobs:
       - name: Super-linter
         uses: super-linter/super-linter@v7.2.0 # x-release-please-version
         env:
-          # To report GitHub Actions status checks
+           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Disable specific linters (e.g., Python and YAML)
+          DISABLE_LINTERS: "YAML_PRETTIER,MARKDOWN_PRETTIER"
+          FILTER_REGEX_EXCLUDE: "docs/.*\\.md"
