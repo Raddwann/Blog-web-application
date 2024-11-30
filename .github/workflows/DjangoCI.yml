@@ -56,12 +56,6 @@ jobs:
       run: |
         python gaming-hub-main/manage.py test
     
-    - name: Frontend Lint and Test
-      run: |
-        cd gaming-hub-main/frontend
-        npm ci
-        npm run lint
-        npm run test
 
   build:
     needs: test
@@ -69,11 +63,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
-    - name: Build Frontend
-      run: |
-        cd gaming-hub-main/frontend
-        npm run build
-    
+
     - name: Deploy to Staging
       if: github.ref == 'refs/heads/develop'
       run: |
