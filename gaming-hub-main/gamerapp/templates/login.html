@@ -13,19 +13,21 @@
     <div id="stars"></div>
     <div id="stars2"></div>
     <div id="stars3"></div>
-    <form class="login-form">
+    <form class="login-form" method="POST">
+      {% csrf_token %}
       <h1>Login</h1>
       <label for="username">Username</label>
       <input type="text" id="username" name="username" placeholder="Enter your username" required>
-      
+  
       <label for="password">Password</label>
       <input type="password" id="password" name="password" placeholder="Enter your password" required>
-      
+  
       <button type="submit">Login</button>
       <p class="create-account">
-        <label for="">Don't have an account?</label><a href="{% url "signup" %}">Create Account</a>
+          <label for="">Don't have an account? </label>
+          <a href="{% url 'signup' %}">Sign Up</a>
       </p>
-    </form>
+  </form>
   </div>
 </body>
 </html>
