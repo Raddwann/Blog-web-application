@@ -23,6 +23,8 @@ from io import BytesIO
 from PIL import Image
 from .models import GamingUser  
 from django.contrib import messages
+from django.contrib.auth import logout as auth_logout
+
 # Create your views here.
 
 def get_referer(request):
@@ -200,6 +202,11 @@ def signup(request):
             return redirect("login")  
 
     return render(request, "signup.html")
+
+def logout(request):
+    auth_logout(request)  # Logs out the user
+    messages.success(request, "You have been logged out successfully.")
+    return redirect("login")
 
 def coming_soon(request):
     

@@ -271,6 +271,14 @@
                 </form>
             </div>
           </li>
+          <li>
+            <form method="post" action="{% url 'logout' %}" style="display: inline;">
+              {% csrf_token %}
+              <button type="submit" class="navbar-link" style="background: none; border: none; color: #fff; font-size: inherit; cursor: pointer;">
+                Sign Out
+              </button>
+            </form>
+          </li>
         </ul>
         <label for="menu-btn" class="btn menu-btn"><i class="fas fa-bars"></i></label>
       </div>
@@ -280,6 +288,9 @@
           <input id="searchInput" class="form-control" type="text" placeholder="What are you looking for ?" aria-label="What are you looking for..." aria-describedby="button-search" />
       </form>
     </div>
+
+    
+      
     {% if request.path != '/' %}
       {% if request.path|slice:"0:8" == '/search/' or request.path == '/coming-soon/' %}
         {% else %}

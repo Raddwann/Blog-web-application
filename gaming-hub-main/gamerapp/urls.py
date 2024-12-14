@@ -5,6 +5,7 @@ urlpatterns = [
     path('', views.login , name="login"),
     path('home/', views.home , name="home"),
     path('signup/', views.signup , name="signup"),
+    path('logout/', views.logout, name="logout"),
     path('search/<str:search>/', views.search, name='search'),
     path('coming-soon/', views.coming_soon, name='coming-soon'),
     
