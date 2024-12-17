@@ -21,7 +21,9 @@ import re
 from django.contrib.auth.decorators import login_required
 from io import BytesIO
 from PIL import Image
-
+from .models import GamingUser  
+from django.contrib import messages
+from django.contrib.auth import logout as auth_logout
 
 # Create your views here.
 
@@ -164,6 +166,47 @@ def search(request , search):
     context = {'results': results , 'search' : search}
     return render(request, 'search_results.html', context)
 
+def login(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        
+        # Validate the user
+        try:
+            user = GamingUser.objects.get(username=username)
+            if user.password == password:  
+                # Redirect to home page on success
+                messages.success(request, "Login successful!")
+                return redirect("home")
+            else:
+                messages.error(request, "Invalid username or password!")
+        except GamingUser.DoesNotExist:
+            messages.error(request, "Invalid username or password!")
+    
+    return render(request, "login.html")
+
+def signup(request):
+    if request.method == "POST":
+        print("POST request received")  
+        username = request.POST.get("username")
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        
+        if GamingUser.objects.filter(username=username).exists():
+            messages.error(request, "Username already taken!")
+        elif GamingUser.objects.filter(email=email).exists():
+            messages.error(request, "Email already registered!")
+        else:
+            GamingUser.objects.create(username=username, email=email, password=password)
+            messages.success(request, "Account created successfully!")
+            return redirect("login")  
+
+    return render(request, "signup.html")
+
+def logout(request):
+    auth_logout(request)  # Logs out the user
+    messages.success(request, "You have been logged out successfully.")
+    return redirect("login")
 
 def coming_soon(request):
     
