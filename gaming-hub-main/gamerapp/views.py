@@ -21,10 +21,14 @@ import re
 from django.contrib.auth.decorators import login_required
 from io import BytesIO
 from PIL import Image
-from .models import GamingUser  
 from django.contrib import messages
 from django.contrib.auth import logout as auth_logout
-
+from django.contrib.auth.decorators import login_required
+from.forms import *
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
+from django.contrib.auth.hashers import make_password
 # Create your views here.
 
 def get_referer(request):
@@ -145,6 +149,30 @@ def home(request):
     context={'one_review' : one_review , 'trending_reviews' : trending_reviews , 'you_may_like_reviews' : you_may_like_reviews , 'popular_posts' : popular_posts}
     return render(request, 'home.html' , context)
 
+
+@login_required
+def profile(request):
+    if request.method == 'POST':
+        userform = ProfileForm(request.POST, instance=request.user)
+        
+        if userform.is_valid():
+            user = userform.save(commit=False)
+            
+            # Check if the password is changed in the form
+            password = userform.cleaned_data.get('password')  # Assuming 'password' is a field in the form
+            if password:
+                user.password = make_password(password)  # Hash the password
+                
+            user.save()  # Save the user with the hashed password
+            messages.success(request, "Profile saved successfully!")
+            return redirect('profile')  # Redirect to a success page or profile page
+
+    else:
+        userform = ProfileForm(instance=request.user)
+    context = {'userform' : userform}
+    return render(request, 'profile.html', context)
+
+
 def search(request , search):
     if search:
         # Split the search string into words
@@ -167,37 +195,42 @@ def search(request , search):
     return render(request, 'search_results.html', context)
 
 def login(request):
+    print('z')
     if request.method == "POST":
+        print('0')
         username = request.POST.get("username")
         password = request.POST.get("password")
-        
-        # Validate the user
         try:
-            user = GamingUser.objects.get(username=username)
-            if user.password == password:  
-                # Redirect to home page on success
-                messages.success(request, "Login successful!")
-                return redirect("home")
+            user = User.objects.get(username=username)
+            print('1')
+            if user.check_password(password):
+                print('2')
+                auth_login(request, user)
+                print('3')
+                return redirect('home')
             else:
+                print('4')
                 messages.error(request, "Invalid username or password!")
-        except GamingUser.DoesNotExist:
-            messages.error(request, "Invalid username or password!")
+        except Exception as e:       
+            print('5')  
+            print(f'An error occurred: {e}')
     
     return render(request, "login.html")
 
 def signup(request):
     if request.method == "POST":
-        print("POST request received")  
         username = request.POST.get("username")
         email = request.POST.get("email")
         password = request.POST.get("password")
         
-        if GamingUser.objects.filter(username=username).exists():
+        if User.objects.filter(username=username).exists():
             messages.error(request, "Username already taken!")
-        elif GamingUser.objects.filter(email=email).exists():
+        elif User.objects.filter(email=email).exists():
             messages.error(request, "Email already registered!")
         else:
-            GamingUser.objects.create(username=username, email=email, password=password)
+            user = User.objects.create(username=username, email=email)
+            user.set_password(password)
+            user.save()
             messages.success(request, "Account created successfully!")
             return redirect("login")  
 
