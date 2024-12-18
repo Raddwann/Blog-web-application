@@ -8,6 +8,8 @@ def global_variables(request):
     homebody_paths = [
         '/home/',
         '/profile/',
+        '/add-blog/',
+        '/reviews/<str:slug>/'
         '/privacy-policy/',
         '/contact/',
         '/pc-builds/',

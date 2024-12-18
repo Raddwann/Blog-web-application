@@ -10,3 +10,8 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username' , 'email' ,'password']
+        
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['topic', 'image', 'main_category', 'sub_category', 'sub_subcategory', 'body']
