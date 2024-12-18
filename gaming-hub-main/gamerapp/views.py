@@ -29,6 +29,9 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.hashers import make_password
+from django.db import connection
+from datetime import datetime
+
 # Create your views here.
 
 def get_referer(request):
@@ -242,21 +245,55 @@ def logout(request):
     return redirect("login")
 
 def add_blog(request):
-    if request.method == 'POST':
-        form = PostForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()  # Save the form data to the database
-            return redirect('home')  
-    else:
-        form = PostForm()
+    if request.method == "POST":
+        topic = request.POST.get("topic")
+        image = request.POST.get("image")
+        body = request.POST.get("body")
+        current_date = request.POST.get("current_date")
+        
+        connection.autocommit = True
+        with connection.cursor() as cursor:
+            current_date = datetime.now()
 
-    return render(request, 'add_blog.html', {'form': form})
+            # Use parameterized query to prevent SQL injection
+            cursor.execute("""
+                INSERT INTO gamerapp_blog_post (topic, image, body, date_created)
+                VALUES (%s, %s, %s, %s)
+            """, [topic, image, body, current_date])        
+            cursor.close()
+            connection.close()
+
+    context = {
+
+    }
+
+    return render(request, 'add_blog.html',context)
 
 def blog_reviews(request,id):
-    
-    blog_post = Blog_Post.objects.get(id=id)
-    context = {"blog_post":blog_post}
-    return render(request, 'blog_reviews.html', context)
+        connection.autocommit = True
+        with connection.cursor() as cursor:
+            cursor.execute(f"SELECT * FROM gamerapp_blog_post WHERE id = {id}")
+            
+            result = cursor.fetchall()  # Fetch all results
+            cursor.close()
+            connection.close()
+
+            for row in result:
+                print(row)
+
+            # Example of an INSERT query
+            
+        id,topic,image,body,date = result[0]
+        context = {
+            'id': id,
+            'topic': topic,
+            'image': image,
+            'body': body,
+            'date': date,
+        }
+
+        
+        return render(request, 'blog_reviews.html', context)
 
 def coming_soon(request):
     

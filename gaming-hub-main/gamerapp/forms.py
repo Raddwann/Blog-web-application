@@ -14,4 +14,4 @@ class ProfileForm(forms.ModelForm):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Review
-        fields = ['topic', 'image', 'main_category', 'sub_category', 'sub_subcategory', 'body']
+        fields = ['topic', 'image', 'body']
