@@ -82,6 +82,7 @@ class Review(models.Model):
     sub_subcategory = models.ForeignKey('Sub_SubCategory' , on_delete=models.SET_NULL , null = True, blank=True)
     intro = models.CharField(max_length=256 , null = True)
     slug = models.SlugField(blank = True , null = True)
+    body = models.TextField(max_length=2000 ,null=True)
     date_created = models.DateTimeField(auto_now=True)
     
     def save(self , *args , **kwargs):
