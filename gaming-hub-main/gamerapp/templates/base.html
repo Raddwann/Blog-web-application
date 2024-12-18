@@ -274,7 +274,7 @@
           <li>
             <form method="post" action="{% url 'logout' %}" style="display: inline;">
               {% csrf_token %}
-              <button type="submit" class="navbar-link" style="background: none; border: none; color: #fff; font-size: inherit; cursor: pointer;">
+              <button type="submit" class="desktop-item" style="background: none; border: none; color: #fff; font-size: inherit; cursor: pointer;">
                 Sign Out
               </button>
             </form>
@@ -545,8 +545,8 @@ overlay.addEventListener('click', hideModal);
 
   // Check if the flag indicating whether the div has been shown before exists in local storage
   var hasDivBeenShown = localStorage.getItem('divShown');
-  var divShownTimestamp = localStorage.getItem('divShownTimestamp');
-  {% comment %} localStorage.setItem('divShown', 'false'); {% endcomment %}
+//   var divShownTimestamp = localStorage.getItem('divShownTimestamp');
+// localStorage.setItem('divShown', 'false'); 
   // If the flag does not exist or is false, show the div and set the flag in local storage to true
   if (!hasDivBeenShown || hasDivBeenShown === 'false') {
     setTimeout(function() {
@@ -565,7 +565,7 @@ overlay.addEventListener('click', hideModal);
       }, 20000);
   }
 }
-{% comment %} timestamp = localStorage.getItem('divShownTimestamp')
-console.log(new Date(Date.now())); {% endcomment %}
+// timestamp = localStorage.getItem('divShownTimestamp')
+// console.log(new Date(Date.now())); 
 </script>
 
