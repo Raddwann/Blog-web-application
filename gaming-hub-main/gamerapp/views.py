@@ -241,6 +241,23 @@ def logout(request):
     messages.success(request, "You have been logged out successfully.")
     return redirect("login")
 
+def add_blog(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()  # Save the form data to the database
+            return redirect('home')  
+    else:
+        form = PostForm()
+
+    return render(request, 'add_blog.html', {'form': form})
+
+def blog_reviews(request,id):
+    
+    blog_post = Blog_Post.objects.get(id=id)
+    context = {"blog_post":blog_post}
+    return render(request, 'blog_reviews.html', context)
+
 def coming_soon(request):
     
     context = {}
