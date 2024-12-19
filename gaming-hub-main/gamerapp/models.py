@@ -109,9 +109,9 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
     
-class Blog_Post(models.Model):
+class User_Post(models.Model):
+    author = models.CharField(max_length=30, null=True)
     topic = models.CharField(max_length=64)
-    image = models.ImageField(upload_to='images/',null=True,blank=True)
     body = models.TextField(max_length=2000 ,null=True)
     date_created = models.DateTimeField(auto_now=True)
 
