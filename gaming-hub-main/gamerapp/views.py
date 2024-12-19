@@ -31,7 +31,7 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.hashers import make_password
 from django.db import connection
 from datetime import datetime
-
+from django.core.files.storage import FileSystemStorage
 # Create your views here.
 
 def get_referer(request):
@@ -247,49 +247,58 @@ def logout(request):
 def add_blog(request):
     if request.method == "POST":
         topic = request.POST.get("topic")
-        image = request.POST.get("image")
         body = request.POST.get("body")
-        current_date = request.POST.get("current_date")
-        
-        connection.autocommit = True
-        with connection.cursor() as cursor:
-            current_date = datetime.now()
+        current_date = datetime.now()
+        author = request.user.username
+        # Handle the uploaded image
+        # image = request.FILES.get("imageUpload")  # Retrieve the uploaded file
+        # image_url = None  # Default to None
 
-            # Use parameterized query to prevent SQL injection
-            cursor.execute("""
-                INSERT INTO gamerapp_blog_post (topic, image, body, date_created)
-                VALUES (%s, %s, %s, %s)
-            """, [topic, image, body, current_date])        
-            cursor.close()
+        # if image:
+        #     fs = FileSystemStorage()
+        #     image_path = fs.save(image.name, image)  # Save the file
+        #     image_url = fs.url(image_path)          # Get the URL for the file
+
+        # # Ensure image_url has a value
+        # image_url = image_url or ""  # Use an empty string if no image is uploaded
+
+        try:
+            # Use a parameterized query to insert data
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    INSERT INTO gamerapp_User_Post (topic, body, date_created, author)
+                    VALUES (%s, %s, %s, %s)
+                """, [topic, body, current_date, author])
+        except Exception as e:
+            print(f"Database error: {e}")
+        finally:
+            # Ensure the database connection is closed
             connection.close()
 
-    context = {
-
-    }
+    context = {}
 
     return render(request, 'add_blog.html',context)
 
 def blog_reviews(request,id):
         connection.autocommit = True
         with connection.cursor() as cursor:
-            cursor.execute(f"SELECT * FROM gamerapp_blog_post WHERE id = {id}")
+            cursor.execute(f"SELECT * FROM gamerapp_User_Post WHERE id = {id}")
             
             result = cursor.fetchall()  # Fetch all results
             cursor.close()
             connection.close()
-
-            for row in result:
-                print(row)
-
-            # Example of an INSERT query
-            
-        id,topic,image,body,date = result[0]
+        
+        print(result[0])
+        id,author,topic,body,date = result[0]
+        print(f"topic : {topic}")
+        print(f"body : {body}")
+        print(f"date : {date}")
+        print(f"author : {author}")
         context = {
-            'id': id,
             'topic': topic,
-            'image': image,
             'body': body,
             'date': date,
+            'author': author,
         }
 
         
