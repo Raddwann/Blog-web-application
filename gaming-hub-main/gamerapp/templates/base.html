@@ -15,9 +15,8 @@
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
         <link href="{% static 'css/stars_background.css' %}" rel="stylesheet" />
-        <link rel="stylesheet" href="{% static 'css/light-theme.css' %}">
         {% comment %} ---------fonts-------- {% endcomment %}
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,6 +34,9 @@
 
           gtag('config', 'G-QNHQYD3D95');
         </script>
+
+        <!-- Dark mode button event handler -->
+        <script type="text/javascript" src="{% static 'js/darkmode.js' %}" defer></script>
     </head>
     <nav id = "navbar">
       <div class="wrapper">
@@ -217,6 +219,14 @@
           </li>
           <li><a class="desktop-item" href="{% url "coming-soon" %}">Prebuilts</a></li>
           <li><a class="desktop-item" href="{% url "coming-soon" %}">News</a></li>
+
+          <!-- Dark mode button -->
+          <!-- <button class="desktop-item" id="theme-switch" href="#" style="font-size: 20px;">
+            <i class="fas fa-moon"></i>
+          </button> -->
+          <li><a class="desktop-item" id="theme-switch" href="#" style="font-size: 20px; margin-top:15px;"><i class="fas fa-sun" id="theme-class-switch"></i></a></li>
+          <label class="mobile-item"><a id="theme-switch-mobile" href="#" style="font-size: 20px;"><i class="fas fa-sun" id="theme-class-switch-mobile"></i></a>
+        </label>
           <li id="newsletterIcon" href="#"><a class="fas fa-envelope desktop-item" style="font-size: 20px;margin-top:15px;"></a></li>
           <div id="overlay"></div>
           <div id="newsletterModal" class="newsletterModal">
@@ -323,7 +333,7 @@
                 </div>
             <div>
         {% endif %}
-        {% comment %} <button id="mode-toggle">Toggle Dark Mode</button> {% endcomment %}
+        <!-- {% comment %} <button id="mode-toggle">Toggle Dark Mode</button> {% endcomment %} -->
 
         <!-- Footer-->
         <footer id="footer" class="py-5 bg-dark custom-footer">
@@ -363,7 +373,6 @@
       </footer>
     </body>
 </html>
-
 <script>
   
     footerForNonPosts();
@@ -568,4 +577,5 @@ overlay.addEventListener('click', hideModal);
 // timestamp = localStorage.getItem('divShownTimestamp')
 // console.log(new Date(Date.now())); 
 </script>
+
 
