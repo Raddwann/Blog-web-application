@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block body %}
+                <div class="col-lg-7-5">
+                    <!-- Post content-->
+                    <article>
+                        <!-- Post header-->
+                        <header class="mb-4" id="intro">
+                            <!-- Post title-->
+                            <h1 style="font-size:45px" class="fw-bolder mb-1">{{topic}}</h1><br>
+                            <!-- Post meta content-->
+                            {{author}}
+                            <!-- Post categories-->
+                        </header>
+                        <!-- Preview image figure-->
+                        <!-- <figure class="mb-4"><img style="border-radius: 15px;margin-bottom:30px;" class="card-img-top" src="{{image}}" alt="..." /></figure> -->
+                        <!-- Post content-->
+                        <section class="mb-5">
+                            <p style="font-size:30px;" class="fs-5 mb-4">
+                                {{body}}
+                            </p>      
+                        </section>
+                        {% include "partials/related_custom_pc_builds.html" %}
+                    </article>
+                </div>
+                
+                {% comment %} {% include "partials/right_side_widget.html" %} {% endcomment %}
+{% endblock body %}

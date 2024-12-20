@@ -21,8 +21,17 @@ import re
 from django.contrib.auth.decorators import login_required
 from io import BytesIO
 from PIL import Image
-
-
+from django.contrib import messages
+from django.contrib.auth import logout as auth_logout
+from django.contrib.auth.decorators import login_required
+from.forms import *
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
+from django.contrib.auth.hashers import make_password
+from django.db import connection
+from datetime import datetime
+from django.core.files.storage import FileSystemStorage
 # Create your views here.
 
 def get_referer(request):
@@ -143,6 +152,30 @@ def home(request):
     context={'one_review' : one_review , 'trending_reviews' : trending_reviews , 'you_may_like_reviews' : you_may_like_reviews , 'popular_posts' : popular_posts}
     return render(request, 'home.html' , context)
 
+
+@login_required
+def profile(request):
+    if request.method == 'POST':
+        userform = ProfileForm(request.POST, instance=request.user)
+        
+        if userform.is_valid():
+            user = userform.save(commit=False)
+            
+            # Check if the password is changed in the form
+            password = userform.cleaned_data.get('password')  # Assuming 'password' is a field in the form
+            if password:
+                user.password = make_password(password)  # Hash the password
+                
+            user.save()  # Save the user with the hashed password
+            messages.success(request, "Profile saved successfully!")
+            return redirect('profile')  # Redirect to a success page or profile page
+
+    else:
+        userform = ProfileForm(instance=request.user)
+    context = {'userform' : userform}
+    return render(request, 'profile.html', context)
+
+
 def search(request , search):
     if search:
         # Split the search string into words
@@ -164,6 +197,112 @@ def search(request , search):
     context = {'results': results , 'search' : search}
     return render(request, 'search_results.html', context)
 
+def login(request):
+    print('z')
+    if request.method == "POST":
+        print('0')
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        try:
+            user = User.objects.get(username=username)
+            print('1')
+            if user.check_password(password):
+                print('2')
+                auth_login(request, user)
+                print('3')
+                return redirect('home')
+            else:
+                print('4')
+                messages.error(request, "Invalid username or password!")
+        except Exception as e:       
+            print('5')  
+            print(f'An error occurred: {e}')
+    
+    return render(request, "login.html")
+
+def signup(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Username already taken!")
+        elif User.objects.filter(email=email).exists():
+            messages.error(request, "Email already registered!")
+        else:
+            user = User.objects.create(username=username, email=email)
+            user.set_password(password)
+            user.save()
+            messages.success(request, "Account created successfully!")
+            return redirect("login")  
+
+    return render(request, "signup.html")
+
+def logout(request):
+    auth_logout(request)  # Logs out the user
+    messages.success(request, "You have been logged out successfully.")
+    return redirect("login")
+
+def add_blog(request):
+    if request.method == "POST":
+        topic = request.POST.get("topic")
+        body = request.POST.get("body")
+        current_date = datetime.now()
+        author = request.user.username
+        # Handle the uploaded image
+        # image = request.FILES.get("imageUpload")  # Retrieve the uploaded file
+        # image_url = None  # Default to None
+
+        # if image:
+        #     fs = FileSystemStorage()
+        #     image_path = fs.save(image.name, image)  # Save the file
+        #     image_url = fs.url(image_path)          # Get the URL for the file
+
+        # # Ensure image_url has a value
+        # image_url = image_url or ""  # Use an empty string if no image is uploaded
+
+        try:
+            # Use a parameterized query to insert data
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    INSERT INTO gamerapp_User_Post (topic, body, date_created, author)
+                    VALUES (%s, %s, %s, %s)
+                """, [topic, body, current_date, author])
+        except Exception as e:
+            print(f"Database error: {e}")
+        finally:
+            # Ensure the database connection is closed
+            connection.close()
+
+    context = {}
+
+    return render(request, 'add_blog.html',context)
+
+def blog_reviews(request,id):
+        connection.autocommit = True
+        with connection.cursor() as cursor:
+            cursor.execute(f"SELECT * FROM gamerapp_User_Post WHERE id = {id}")
+            
+            result = cursor.fetchall()  # Fetch all results
+            cursor.close()
+            connection.close()
+        
+        print(result[0])
+        id,author,topic,body,date = result[0]
+        print(f"topic : {topic}")
+        print(f"body : {body}")
+        print(f"date : {date}")
+        print(f"author : {author}")
+        context = {
+            'topic': topic,
+            'body': body,
+            'date': date,
+            'author': author,
+        }
+
+        
+        return render(request, 'blog_reviews.html', context)
 
 def coming_soon(request):
     

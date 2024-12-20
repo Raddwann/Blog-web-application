@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
-
+from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 # class AffiliateProduct(models.Model):
@@ -82,6 +82,7 @@ class Review(models.Model):
     sub_subcategory = models.ForeignKey('Sub_SubCategory' , on_delete=models.SET_NULL , null = True, blank=True)
     intro = models.CharField(max_length=256 , null = True)
     slug = models.SlugField(blank = True , null = True)
+    body = models.TextField(max_length=2000 ,null=True)
     date_created = models.DateTimeField(auto_now=True)
     
     def save(self , *args , **kwargs):
@@ -99,3 +100,21 @@ class NewsletterSubscription(models.Model):
 
     def __str__(self):
         return self.email
+    
+class User(AbstractUser):
+    username = models.CharField(max_length=150, unique=True)
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=128)
+
+    def __str__(self):
+        return self.username
+    
+class User_Post(models.Model):
+    author = models.CharField(max_length=30, null=True)
+    topic = models.CharField(max_length=64)
+    body = models.TextField(max_length=2000 ,null=True)
+    date_created = models.DateTimeField(auto_now=True)
+
+    
+    def __str__(self):
+        return self.topic

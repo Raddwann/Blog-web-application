@@ -2,7 +2,12 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.home , name="home"),
+    path('', views.login , name="login"),
+    path('home/', views.home , name="home"),
+    path('signup/', views.signup , name="signup"),
+    path('logout/', views.logout, name="logout"),
+    path('profile/', views.profile, name="profile"),
+    path('add-blog/', views.add_blog, name="add-blog"),
     path('search/<str:search>/', views.search, name='search'),
     path('coming-soon/', views.coming_soon, name='coming-soon'),
     
@@ -16,6 +21,7 @@ urlpatterns = [
     
     
     path('reviews/', views.reviews , name="reviews"),
+    path('reviews/<int:id>', views.blog_reviews , name="blog-reviews"),
     #-------------------------------------gaming peripherals------------------------------------------------
     # -----------category-------------------
     path('reviews/gaming-peripherals-reviews/', views.gaming_peripherals_reviews , name="gaming-peripherals-reviews"),

@@ -6,7 +6,9 @@ def global_variables(request):
     # Gpsub_categories = Sub_Category.objects.filter(main_category__name = "Gaming Peripherals")
     
     homebody_paths = [
-        '/',
+        '/home/',
+        '/profile/',
+        '/add-blog/',
         '/privacy-policy/',
         '/contact/',
         '/pc-builds/',

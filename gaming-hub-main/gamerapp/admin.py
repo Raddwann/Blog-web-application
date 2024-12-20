@@ -9,5 +9,5 @@ admin.site.register(Sub_SubCategory)
 # admin.site.register(AffiliateProduct)
 admin.site.register(Type)
 admin.site.register(NewsletterSubscription)
-
-
+admin.site.register(User)  
+admin.site.register(User_Post)  
