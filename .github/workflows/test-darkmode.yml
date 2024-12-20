@@ -36,7 +36,6 @@ jobs:
 
     - name: Set up Django and start server
       run: |
-        cd Blog-web-application
         cd gaming-hub-main
         python manage.py migrate
         nohup python manage.py runserver 0.0.0.0:8000 &
