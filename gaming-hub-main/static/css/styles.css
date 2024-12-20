@@ -80,14 +80,20 @@
 
   --base-color: white;
   --card-body-bgColor: #f9f9f9;
-  --base-variant: #4d4c4c;
-  --custom-card-bgColor: rgba(77, 76, 76, 0.3);
+  --base-variant: #ffffff;
+  --text-color: black;
+  --custom-card-bgColor: rgba(238, 181, 181, 0.3);
 }
 
 .darkmode {
-  background-color: #333;
-  color: var(--base-color);
+  --base-color: #333;
+  --card-body-bgColor: #f9f9f9;
+  --text-color: white;
+  --custom-card-bgColor: rgba(77, 76, 76, 0.3);
   --card-body-bgColor: #333;
+
+  background-color: var(--base-color);
+  color: var(--text-color);
 }
 
 *,
@@ -110,7 +116,6 @@ body {
   line-height: var(--bs-body-line-height);
   color: var(--bs-body-color);
   text-align: var(--bs-body-text-align);
-  background-color: var(--base-color);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
@@ -142,6 +147,23 @@ body {
 }
 
 .darkmode #theme-switch svg:last-child {
+  display: block;
+}
+
+#theme-switch-mobile {
+  color: #f2f2f2;
+}
+
+/* Mobile mode theme switch */
+#theme-switch-mobile svg:last-child {
+  display: none;
+}
+
+.darkmode #theme-switch-mobile svg:first-child {
+  display: none;
+}
+
+.darkmode #theme-switch-mobile svg:last-child {
   display: block;
 }
 
@@ -4221,7 +4243,7 @@ textarea.form-control-lg {
   --bs-card-cap-bg: rgba(0, 0, 0, 0.03);
   --bs-card-cap-color: ;
   --bs-card-height: ;
-  --bs-card-color: var(--base-color);
+  --bs-card-color: var(--text-color);
   --bs-card-bg: var(--custom-card-bgColor);
   --bs-card-img-overlay-padding: 1rem;
   --bs-card-group-margin: 0.75rem;
@@ -10942,7 +10964,7 @@ textarea.form-control-lg {
 .review-link {
   font-weight: 700;
   text-decoration: none;
-  color: black;
+  color: var(--text-color);
   transition: color 0.2s ease, text-decoration 0.2s ease;
 }
 
@@ -11323,7 +11345,7 @@ a {
   margin-top: 20px;
   font-size:24px;
   font-weight: 500;
-  color:#000;
+  color: var(--text-color);
   float: left;
 }
 
@@ -11372,7 +11394,7 @@ a {
 }
 
 .path {
-  background-color: #e9e9e9;
+  background-color: var(--base-color);
   width:100%;
   height:40px;
   padding-left: 25.6%;
@@ -11380,7 +11402,7 @@ a {
 }
 
 .path a {
-  color:black;
+  color: var(--text-color);
   font-size: 13px;
 }
 
@@ -11609,6 +11631,8 @@ a {
   height: 50px;
   padding: 10px;
   margin-bottom: 10px;
+  background-color: var(--card-body-bgColor);
+  color: var(--text-color);
 }
 
 .newsletterModal button[type="submit"] {
@@ -11969,8 +11993,6 @@ nav .wrapper{
   top: 10px;
 }
 @media screen and (max-width: 970px) {
-
-  
   .wrapper .btn{
     display: block;
   }

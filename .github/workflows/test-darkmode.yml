@@ -1,0 +1,51 @@
+name: Test Dark Mode Feature
+
+on:
+  push:
+    branches:
+      - main
+      - nour
+  pull_request:
+    branches:
+      - main
+      - nour
+
+jobs:
+  test-dark-mode:
+    runs-on: ubuntu-latest
+
+    services:
+      selenium:
+        image: selenium/standalone-chrome
+        ports:
+          - "4444:4444"
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.9"
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install selenium
+
+    - name: Set up Django and start server
+      run: |
+        python manage.py migrate
+        nohup python manage.py runserver 0.0.0.0:8000 &
+      env:
+        DJANGO_SETTINGS_MODULE: gamerhub.settings
+
+    - name: Wait for server to start
+      run: sleep 10
+
+    - name: Run dark mode tests
+      env:
+        SELENIUM_URL: http://localhost:4444/wd/hub
+      run: |
+        python gaming-hub-main/darkmode_test.py

@@ -225,6 +225,8 @@
             <i class="fas fa-moon"></i>
           </button> -->
           <li><a class="desktop-item" id="theme-switch" href="#" style="font-size: 20px; margin-top:15px;"><i class="fas fa-sun" id="theme-class-switch"></i></a></li>
+          <label class="mobile-item"><a id="theme-switch-mobile" href="#" style="font-size: 20px;"><i class="fas fa-sun" id="theme-class-switch-mobile"></i></a>
+        </label>
           <li id="newsletterIcon" href="#"><a class="fas fa-envelope desktop-item" style="font-size: 20px;margin-top:15px;"></a></li>
           <div id="overlay"></div>
           <div id="newsletterModal" class="newsletterModal">
@@ -541,7 +543,7 @@ overlay.addEventListener('click', hideModal);
 
   // Check if the flag indicating whether the div has been shown before exists in local storage
   var hasDivBeenShown = localStorage.getItem('divShown');
-  var divShownTimestamp = localStorage.getItem('divShownTimestamp');
+  // var divShownTimestamp = localStorage.getItem('divShownTimestamp');
   {% comment %} localStorage.setItem('divShown', 'false'); {% endcomment %}
   // If the flag does not exist or is false, show the div and set the flag in local storage to true
   if (!hasDivBeenShown || hasDivBeenShown === 'false') {
