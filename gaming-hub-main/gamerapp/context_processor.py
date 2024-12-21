@@ -9,6 +9,7 @@ def global_variables(request):
         '/home/',
         '/profile/',
         '/add-blog/',
+        '/user-blogs/',
         '/privacy-policy/',
         '/contact/',
         '/pc-builds/',

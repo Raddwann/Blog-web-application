@@ -3,39 +3,185 @@
 {% load custom_filters %}
 
 {% block homebody %}
-    <div class="container mt-5">
-        <h1>Create Post</h1>
-        
-        <!-- Display the form -->
-        <form method="POST" enctype="multipart/form-data">
+<style>
+    .contact-form-container{
+        max-width: 800px;
+        background: #f9f9f9;
+        width: 800px;
+        padding: 25px 40px 10px 40px;
+        background-color: var(--base-color);
+        color: var(--text-color);
+        /* {% comment %} box-shadow: 0px 0px 10px rgba(0,0,0,0.1); {% endcomment %} */
+        margin: 0 auto;
+      }
+      .contact-form-container .contact-form-text{
+        text-align: center;
+        font-size: 41px;
+        font-weight: 600;
+        font-family: 'Poppins', sans-serif;
+        background: #a00000;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .contact-form-container form{
+        padding: 30px 0 0 0;
+      }
+      .contact-form-container form .contact-form-row{
+        display: flex;
+        margin: 32px 0;
+      }
+      form .contact-form-row .input-data{
+        width: 100%;
+        height: 40px;
+        margin: 0 20px;
+        position: relative;
+      }
+      form .contact-form-row .contact-form-textarea{
+        height: 100px;
+        background-color:#f9f9f9;
+      }
+      .input-data input,
+      .contact-form-textarea textarea{
+        display: block;
+        width: 100%;
+        height: 100%;
+        border: none;
+        font-size: 17px;
+        border-bottom: 2px solid rgba(0,0,0, 0.12);
+        background-color: var(--base-color);
+        color: var(--text-color);
+        padding:10px;
+      }
+      .input-data input:focus ~ label, .contact-form-textarea textarea:focus ~ label,
+      .input-data input:valid ~ label, .contact-form-textarea textarea:valid ~ label{
+        transform: translateY(-30px);
+        font-size: 14px;
+        color: #a00000;
+      }
+
+      .contact-form-textarea textarea:focus ~ label,
+      .contact-form-textarea textarea:valid ~ label{
+        transform: translateY(-60px);
+        font-size: 14px;
+        color: #a00000;
+      }
+
+      .contact-form-textarea textarea{
+        resize: none;
+        padding: 10px;
+      }
+      .input-data label{
+        position: absolute;
+        pointer-events: none;
+        bottom: 10px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+      }
+      .contact-form-textarea label{
+        width: 100%;
+        bottom: 40px;
+        background: none;
+      }
+      .input-data .underline{
+        position: absolute;
+        bottom: 0;
+        height: 2px;
+        width: 100%;
+      }
+      .input-data .underline:before{
+        position: absolute;
+        content: "";
+        height: 2px;
+        width: 100%;
+        background: #a00000;
+        transform: scaleX(0);
+        transform-origin: center;
+        transition: transform 0.3s ease;
+      }
+      .input-data input:focus ~ .underline:before,
+      .input-data input:valid ~ .underline:before,
+      .contact-form-textarea textarea:focus ~ .underline:before,
+      .contact-form-textarea textarea:valid ~ .underline:before{
+        transform: scale(1);
+      }
+      .submit-btn .input-data{
+        overflow: hidden;
+        height: 45px!important;
+        width: 25%!important;
+      }
+      .submit-btn .input-data .inner{
+        height: 100%;
+        width: 300%;
+        position: absolute;
+        left: -100%;
+        background: #a00000;
+        transition: all 0.4s;
+      }
+      .submit-btn .input-data:hover .inner{
+        left: 0;
+      }
+      .submit-btn .input-data input{
+        background: none;
+        border: none;
+        color: #f9f9f9;
+        font-size: 17px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        position: relative;
+        z-index: 2;
+      }
+      @media (max-width: 700px) {
+        .contact-form-container .text{
+          font-size: 30px;
+        }
+        .contact-form-container form{
+          padding: 10px 0 0 0;
+        }
+        .contact-form-container form .contact-form-row{
+          display: block;
+        }
+        form .contact-form-row .input-data{
+          margin: 35px 0!important;
+        }
+        .submit-btn .input-data{
+          width: 40%!important;
+        }
+      }
+</style>
+
+
+<div class="row" style="margin-bottom: 200px;">
+    <div class="contact-form-container">
+        <div class="contact-form-text">
+        Create Your Blog
+        </div>
+        <form method="POST">
             {% csrf_token %}
-            
-            <div class="form-group">
-                <label for="topic">Topic:</label>
-                <input type="text" id="topic" name="topic" placeholder="Enter Topic" required>
+            <div class="contact-form-row">
+                <div class="input-data">
+                    <input id="topic" name="topic" type="contact-form-text" required>
+                    <div class="underline"></div>
+                    <label for="">Topic</label>
+                </div>
             </div>
-
-            <div class="form-group">
-                <label for="body">Body:</label>
-                <input type="text" id="body" name="body" placeholder="Enter body" required>
+            <div class="contact-form-row">
+                <div class="input-data contact-form-textarea">
+                    <textarea id="body" name="body" rows="8" cols="80" required></textarea>
+                    <br />
+                    <div class="underline"></div>
+                    <label for="">Write your Blog</label>
+                    <br />
+                    <div class="contact-form-row submit-btn" style="margin-left : -20px;">
+                        <div class="input-data">
+                            <div class="inner"></div>
+                            <input type="submit" value="submit">
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
-    <script>
-        const imageUpload = document.getElementById('imageUpload');
-        const imagePreview = document.getElementById('imagePreview');
-
-        imageUpload.addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    imagePreview.src = e.target.result;
-                }
-                reader.readAsDataURL(file);
-            }
-        });
-    </script>
+</div>
 {% endblock homebody %}

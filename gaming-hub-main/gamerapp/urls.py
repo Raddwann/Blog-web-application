@@ -10,6 +10,7 @@ urlpatterns = [
     path('add-blog/', views.add_blog, name="add-blog"),
     path('search/<str:search>/', views.search, name='search'),
     path('coming-soon/', views.coming_soon, name='coming-soon'),
+    path('user-blogs/', views.user_blogs, name='user-blogs'),
     
     path('contact/', views.contact, name='contact'),
     path('privacy-policy/', views.privacy_policy, name='privacy-policy'),
