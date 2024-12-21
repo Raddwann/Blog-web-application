@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_filters %}
+{% block homebody %}
+
+    <!-- <img class="card-img-top" src="{% static 'images/reviews/reviews.jpeg' %}" alt="..." /> -->
+<div style="position: absolute; top: 0; left: 0; width: 100%; text-align: center;margin-top: 80px;">
+    <p class="pc-builds-header">User Blogs</p>
+</div>
+<div class="mt-5 categroies-div" style="padding-top: 100px;">      
+    <!-- <center><h2>Subcategories: <a href="{% url "pc-components-reviews" %}">PC Components Reviews</a> | <a href="{% url "gaming-peripherals-reviews" %}">Gaming Peripherals Reviews</a> | <a href="{% url "gaming-laptops-reviews" %}">Gaming Laptops Reviews</a></h2></center>
+    <br><br><br><br> -->
+    <div class="row">
+        {% for blog in user_blogs %}
+        <div style="padding-bottom:30px;" class="col-lg-10">
+            <div>
+                <div class="card-body">
+                    <a href="{% url 'blog-reviews' id=blog.id %}" style="font-size:30px;font-weight: normal;" class="card-title h4 review-link">{{blog.topic}}</a>
+                    <br>
+                    <div style="font-size:15px;" class="small text-muted">{{blog.blog_author}}</div>
+                    <div class="small text-muted"><img src="{% static 'images/calendar.png' %}" alt="Calendar Icon" width="15" height="15" style="margin-bottom: 3px; margin-right: 5px;"> {{blog.date_created|time_ago_format}}</div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock homebody %}

@@ -253,7 +253,7 @@ def add_blog(request):
         topic = request.POST.get("topic")
         body = request.POST.get("body")
         current_date = datetime.now()
-        author = request.user.username
+        blog_author = request.user.id
         # Handle the uploaded image
         # image = request.FILES.get("imageUpload")  # Retrieve the uploaded file
         # image_url = None  # Default to None
@@ -265,14 +265,13 @@ def add_blog(request):
 
         # # Ensure image_url has a value
         # image_url = image_url or ""  # Use an empty string if no image is uploaded
-
         try:
             # Use a parameterized query to insert data
             with connection.cursor() as cursor:
                 cursor.execute("""
-                    INSERT INTO gamerapp_User_Post (topic, body, date_created, author)
+                    INSERT INTO gamerapp_User_Post (blog_author_id,topic, body, date_created)
                     VALUES (%s, %s, %s, %s)
-                """, [topic, body, current_date, author])
+                """, [blog_author,topic, body, current_date])
         except Exception as e:
             print(f"Database error: {e}")
         finally:
@@ -292,21 +291,29 @@ def blog_reviews(request,id):
             cursor.close()
             connection.close()
         
+        id,topic,body,date,blog_author = result[0]
         print(result[0])
-        id,author,topic,body,date = result[0]
-        print(f"topic : {topic}")
-        print(f"body : {body}")
-        print(f"date : {date}")
-        print(f"author : {author}")
+        blog_author = User.objects.get(id=blog_author)
+        # print(f"topic : {topic}")
+        # print(f"body : {body}")
+        # print(f"date : {date}")
+        # print(f"author : {author}")
         context = {
             'topic': topic,
             'body': body,
             'date': date,
-            'author': author,
+            'author': blog_author,
         }
 
         
         return render(request, 'blog_reviews.html', context)
+
+
+def user_blogs(request):
+    user_blogs = User_Post.objects.order_by('?')
+    context = {"user_blogs" : user_blogs}
+    return render(request, 'user_blogs.html', context)
+
 
 def coming_soon(request):
     

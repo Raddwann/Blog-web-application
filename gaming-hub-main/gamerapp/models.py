@@ -60,6 +60,7 @@ class Sub_Category(models.Model):
     def __str__(self):
         return self.name +'(' + self.slug + ')'
     
+    
 class Sub_SubCategory(models.Model):
     name = models.CharField(max_length=64)
     slug = models.SlugField(blank = True , null = True)
@@ -110,7 +111,7 @@ class User(AbstractUser):
         return self.username
     
 class User_Post(models.Model):
-    author = models.CharField(max_length=30, null=True)
+    blog_author = models.ForeignKey('User' , on_delete=models.SET_NULL , null = True, blank=True)
     topic = models.CharField(max_length=64)
     body = models.TextField(max_length=2000 ,null=True)
     date_created = models.DateTimeField(auto_now=True)

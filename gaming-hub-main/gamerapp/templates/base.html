@@ -217,7 +217,7 @@
               </div>
             </div>
           </li>
-          <li><a class="desktop-item" href="{% url "coming-soon" %}">Prebuilts</a></li>
+          <li><a class="desktop-item" href="{% url "user-blogs" %}">User Blogs</a></li>
           <li><a class="desktop-item" href="{% url "coming-soon" %}">News</a></li>
 
           <!-- Dark mode button -->
@@ -282,12 +282,19 @@
             </div>
           </li>
           <li>
-            <form method="post" action="{% url 'logout' %}" style="display: inline;">
+            <!-- <form method="post" action="{% url 'logout' %}" style="display: inline;">
               {% csrf_token %}
-              <button type="submit" class="desktop-item" style="background: none; border: none; color: #fff; font-size: inherit; cursor: pointer;">
-                Sign Out
-              </button>
-            </form>
+              <div class="dropdown"> -->
+                <!-- The button that will toggle the dropdown menu -->
+                <!-- <button type="button" class="desktop-item" style="background: none; border: none; color: #fff; font-size: inherit; cursor: pointer;padding-bottom: -10px;" onclick="toggleDropdown()"><i class="fas fa-user"></i></button>
+                
+                <div id="dropdownMenu" class="dropdown-menu">
+                  <a href="{% url 'profile' %}" style="color: black; padding: 10px; display: block;">Profile</a>
+                  <a href="{% url 'add-blog' %}" style="color: black; padding: 10px; display: block;">Add Blog</a>
+                  <a href="{% url 'logout' %}" style="color: black; padding: 10px; display: block;">Logout</a>
+                </div>
+              </div> -->
+            <!-- </form> -->
           </li>
         </ul>
         <label for="menu-btn" class="btn menu-btn"><i class="fas fa-bars"></i></label>
@@ -578,4 +585,14 @@ overlay.addEventListener('click', hideModal);
 // console.log(new Date(Date.now())); 
 </script>
 
-
+<script>
+  function toggleDropdown() {
+    var menu = document.getElementById('dropdownMenu');
+    // Toggle the display of the menu (show or hide)
+    if (menu.style.display === "none" || menu.style.display === "") {
+      menu.style.display = "block";
+    } else {
+      menu.style.display = "none";
+    }
+  }
+</script>
