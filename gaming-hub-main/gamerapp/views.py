@@ -32,6 +32,8 @@ from django.contrib.auth.hashers import make_password
 from django.db import connection
 from datetime import datetime
 from django.core.files.storage import FileSystemStorage
+from .decorators import require_login
+
 # Create your views here.
 
 def get_referer(request):
@@ -110,6 +112,7 @@ def subscription_confirmed(request):
     return render(request, 'subscription_confirmation/subscription_confirmed.html' , context)
 
 
+@require_login
 def home(request):    
     total_reviews = Review.objects.count()
     # this function get in the one_review only 1 review and in the trending_reviews 8 reviews 
@@ -153,7 +156,7 @@ def home(request):
     return render(request, 'home.html' , context)
 
 
-@login_required
+@require_login
 def profile(request):
     if request.method == 'POST':
         userform = ProfileForm(request.POST, instance=request.user)
@@ -244,6 +247,7 @@ def logout(request):
     messages.success(request, "You have been logged out successfully.")
     return redirect("login")
 
+@require_login
 def add_blog(request):
     if request.method == "POST":
         topic = request.POST.get("topic")
